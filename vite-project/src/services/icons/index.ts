@@ -77,7 +77,11 @@ import { HiOutlineArrowLongLeft } from "react-icons/hi2";
 import { SlOptions } from "react-icons/sl";
 import { FaTruckLoading } from "react-icons/fa";
 import { BiBookmark } from "react-icons/bi";
-import { MdOutlineScreenSearchDesktop, MdClose } from "react-icons/md";
+import {
+  MdOutlineScreenSearchDesktop,
+  MdClose,
+  MdOutlineLogout,
+} from "react-icons/md";
 import { RiBankCardFill, RiKeyLine } from "react-icons/ri";
 import { CiFaceSmile } from "react-icons/ci";
 import { CiFaceMeh } from "react-icons/ci";
@@ -171,4 +175,5 @@ export default class Icons {
   static CartBag = BsCart;
   static AddOnCart = BsCartPlus;
   static Key = RiKeyLine;
+  static Logout = MdOutlineLogout;
 }

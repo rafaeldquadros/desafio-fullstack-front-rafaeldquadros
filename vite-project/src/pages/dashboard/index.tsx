@@ -1,5 +1,4 @@
 import {
-  StyledBoxButtons,
   StyledBoxButtonsTitle,
   StyledBoxCategoriesAndBrandsAdmin,
   StyledBoxListAndSearch,
@@ -7,6 +6,7 @@ import {
   StyledButtonMore,
   StyledCategoriesTitle,
   StyledList,
+  StyledLogout,
   StyledWellcomeDesk,
 } from "./style";
 import { useEffect, useState } from "react";
@@ -26,11 +26,16 @@ import pen from "../../assets/pen.png";
 import trash from "../../assets/trash.png";
 import ModalEditeClient from "../../components/modals/modalEditeClient.modals";
 import Icons from "../../services/icons";
-import ModalModalConfirm from "../../components/modals/modalConfirmPassword.modals";
 import ModalConfirmPassword from "../../components/modals/modalConfirmPassword.modals";
+import ModalUpdatePassword from "../../components/modals/modalUpdatePassword.modals";
+import ModalDeleteClient from "../../components/modals/modalDeleteClient.modals";
+import { useAuth } from "../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [openListContacts, setOpenListContacts] = useState(false);
+  const navigate = useNavigate();
+
   const {
     setModalCreateContact,
     modalCreateContact,
@@ -44,7 +49,14 @@ const Dashboard = () => {
     setModalEditeClient,
     modalConfirmPassword,
     setModalConfirmPassword,
+    modalUpdatePassword,
+    setModalUpdatePassword,
+    modalDeleteClient,
+    setModalDeleteClient,
   } = useUser();
+
+  const { ProtectionRoute } = useAuth();
+
   const handleList = () => {
     return setOpenListContacts(!openListContacts);
   };
@@ -54,6 +66,10 @@ const Dashboard = () => {
       const response = await PerfilClientRequest();
     })();
   }, [modalEditeClient]);
+
+  useEffect(() => {
+    ProtectionRoute();
+  }, []);
   return (
     <>
       <StyledBoxCategoriesAndBrandsAdmin>
@@ -62,6 +78,15 @@ const Dashboard = () => {
             Bem vindo {user.name !== undefined && user.name}, este são seus
             contatos
           </h2>
+          <StyledLogout
+            color="red"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/login");
+            }}
+          >
+            <Icons.Logout />
+          </StyledLogout>
 
           {user && (
             <>
@@ -91,8 +116,6 @@ const Dashboard = () => {
             <StyledButtonMore
               color="goldOne"
               onClick={() => {
-                // setContact(element);
-                // localStorage.setItem("contactId", element.id);
                 setModalConfirmPassword(!modalConfirmPassword);
               }}
             >
@@ -100,8 +123,6 @@ const Dashboard = () => {
             </StyledButtonMore>
             <StyledButtonMore
               onClick={() => {
-                // setContact(element);
-                // localStorage.setItem("contactId", element.id);
                 setModalEditeClient(!modalEditeClient);
               }}
             >
@@ -112,8 +133,7 @@ const Dashboard = () => {
                 src={trash}
                 alt=""
                 onClick={() => {
-                  // localStorage.setItem("contactId", element.id);
-                  setModalDeleteContact(true);
+                  setModalDeleteClient(true);
                 }}
               />
             </StyledButtonMore>
@@ -158,6 +178,10 @@ const Dashboard = () => {
       {modalConfirmPassword && (
         <ModalConfirmPassword close={setModalConfirmPassword} />
       )}
+      {modalUpdatePassword && (
+        <ModalUpdatePassword close={setModalUpdatePassword} />
+      )}
+      {modalDeleteClient && <ModalDeleteClient close={setModalDeleteClient} />}
     </>
   );
 };

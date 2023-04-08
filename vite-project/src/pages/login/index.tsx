@@ -7,6 +7,8 @@ import Button from "../../components/button";
 import { useUser } from "../../context/user.context";
 import { StyledRegister } from "./style";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/auth.context";
+import { useEffect } from "react";
 
 export interface ILogin {
   email: string;
@@ -14,6 +16,7 @@ export interface ILogin {
 }
 const Login = () => {
   const { LoginRequest } = useUser();
+  const { AutoLogin } = useAuth();
   const {
     handleSubmit,
     register,
@@ -27,6 +30,10 @@ const Login = () => {
   const onSubmitLogin = async (data: ILogin) => {
     const response = await LoginRequest(data);
   };
+
+  useEffect(() => {
+    AutoLogin();
+  }, []);
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmitLogin)}>

@@ -6,9 +6,10 @@ import Register from "../pages/register";
 const Routers = () => {
   return (
     <Routes>
+      <Route index element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      
+
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );

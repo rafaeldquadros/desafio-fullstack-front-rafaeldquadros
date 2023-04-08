@@ -6,6 +6,7 @@ import { IRegister } from "../pages/register";
 import { BaseURL, headerAuthorizationConfig } from "../services/axios";
 
 interface IUserContext {
+  ValidPasswordRequest: (data: ILogin) => Promise<void>;
   LoginRequest: (data: ILogin) => Promise<ILoginResponse>;
   RegisterRequest: (data: any) => Promise<any>;
   ListContactsRequest: () => Promise<void>;
@@ -29,9 +30,14 @@ interface IUserContext {
   PerfilClientRequest: () => Promise<void>;
   modalEditeClient: boolean;
   setModalEditeClient: React.Dispatch<React.SetStateAction<boolean>>;
-  EditeClientRequest: (data: IContact) => void;
+  EditeClientRequest: (data: IContact, type: string) => void;
   modalConfirmPassword: boolean;
   setModalConfirmPassword: React.Dispatch<React.SetStateAction<boolean>>;
+  modalUpdatePassword: boolean;
+  setModalUpdatePassword: React.Dispatch<React.SetStateAction<boolean>>;
+  modalDeleteClient: boolean;
+  setModalDeleteClient: React.Dispatch<React.SetStateAction<boolean>>;
+  DeleteClientRequest: () => void;
 }
 
 interface IContact {
@@ -74,6 +80,8 @@ export const UserProvider = ({ children }: IUserProps) => {
   const [modalEditeContact, setModalEditeContact] = useState(false);
   const [modalEditeClient, setModalEditeClient] = useState(false);
   const [modalConfirmPassword, setModalConfirmPassword] = useState(false);
+  const [modalUpdatePassword, setModalUpdatePassword] = useState(false);
+  const [modalDeleteClient, setModalDeleteClient] = useState(false);
 
   const PerfilClientRequest = async (): Promise<any> => {
     await BaseURL.get("/client/perfil", headerAuthorizationConfig())
@@ -95,6 +103,20 @@ export const UserProvider = ({ children }: IUserProps) => {
         pending: "Logando...",
         success: "Login realizado com sucesso",
         error: "Email ou senha invalidos",
+      }
+    );
+  };
+
+  const ValidPasswordRequest = async (data: ILogin): Promise<any> => {
+    toast.promise(
+      BaseURL.post("/session", data).then((res) => {
+        setModalConfirmPassword(false);
+        setModalUpdatePassword(true);
+      }),
+      {
+        pending: "Validando senha",
+        success: "Senha validada",
+        error: "Senha incorreta",
       }
     );
   };
@@ -149,8 +171,24 @@ export const UserProvider = ({ children }: IUserProps) => {
         })
         .catch((err) => console.log(err)),
       {
-        pending: "Editando contato...",
-        success: "Contato Editado com sucesso",
+        pending: "Deletando contato...",
+        success: "Contato deletado com sucesso",
+        error: "Dados invalidos",
+      }
+    );
+  };
+
+  const DeleteClientRequest = () => {
+    toast.promise(
+      BaseURL.delete(`/client`, headerAuthorizationConfig())
+        .then(async (res) => {
+          setModalDeleteClient(false);
+          navigate("/login");
+        })
+        .catch((err) => console.log(err)),
+      {
+        pending: "Deletando sua conta...",
+        success: "Conta deletada com sucesso",
         error: "Dados invalidos",
       }
     );
@@ -177,11 +215,12 @@ export const UserProvider = ({ children }: IUserProps) => {
     );
   };
 
-  const EditeClientRequest = (data: IContact) => {
+  const EditeClientRequest = (data: IContact, type: string) => {
     toast.promise(
       BaseURL.patch(`/client`, data, headerAuthorizationConfig())
         .then(async (res) => {
           await ListContactsRequest();
+          setModalUpdatePassword(false);
           setModalEditeClient(false);
         })
         .catch((err) => console.log(err)),
@@ -222,6 +261,12 @@ export const UserProvider = ({ children }: IUserProps) => {
         EditeClientRequest,
         modalConfirmPassword,
         setModalConfirmPassword,
+        ValidPasswordRequest,
+        modalUpdatePassword,
+        setModalUpdatePassword,
+        modalDeleteClient,
+        setModalDeleteClient,
+        DeleteClientRequest,
       }}
     >
       {children}

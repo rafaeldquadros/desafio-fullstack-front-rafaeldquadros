@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const BaseURL = axios.create({
-  baseURL: "https://desafiofullstack-zj8h.onrender.com",
+  baseURL: "http://localhost:3000",
 });
 
 export const headerAuthorizationConfig = () => {

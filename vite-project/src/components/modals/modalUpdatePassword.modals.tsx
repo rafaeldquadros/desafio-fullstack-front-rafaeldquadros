@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useUser } from "../../context/user.context";
 import { IRegister } from "../../pages/register";
 import Icons from "../../services/icons";
-import { schemaCreateContact } from "../../validation/contacts.schema";
+import { schemaUpdatePassword } from "../../validation/contacts.schema";
 import Button from "../button";
 import { StyledForm } from "../form/style";
 import Input from "../input";
@@ -14,29 +14,22 @@ interface IModalCreateContact {
   close: any;
 }
 
-const ModalEditeClient = ({ close }: IModalCreateContact) => {
-  const { EditeClientRequest, user } = useUser();
+const ModalUpdatePassword = ({ close }: IModalCreateContact) => {
+  const { EditeClientRequest } = useUser();
   const {
     handleSubmit,
     register,
     formState: {
-      errors: { name, email, telefone },
+      errors: { password, confirmPassword },
     },
   } = useForm<IRegister>({
-    resolver: yupResolver(schemaCreateContact),
+    resolver: yupResolver(schemaUpdatePassword),
   });
 
-  const handleClient = (data: any) => {
-    if (data.email == user.email) {
-      delete data.email;
-    }
-    if (data.name == user.name) {
-      delete data.name;
-    }
-    if (data.telefone == user.telefone) {
-      delete data.telefone;
-    }
-    EditeClientRequest(data, "");
+  const handlePassword = async (data: any) => {
+    delete data.confirmPassword;
+    console.log(data);
+    EditeClientRequest(data, "password");
   };
   return (
     <AnimatePresence>
@@ -46,39 +39,33 @@ const ModalEditeClient = ({ close }: IModalCreateContact) => {
           transition={{ duration: 0.5 }}
           animate={{ y: "0%" }}
           exit={{ y: "-100%" }}
-          onSubmit={handleSubmit(handleClient)}
+          onSubmit={handleSubmit(handlePassword)}
         >
-          <h2>Criar contato</h2>
+          <h2>Digite a senha atual</h2>
           <StyledButtonClose type="button" onClick={() => close(false)}>
             <Icons.Close />
           </StyledButtonClose>
 
           <Input
             register={register}
-            placeholder="Nome Completo"
-            name="name"
-            message={name ? `${name.message}` : undefined}
+            placeholder="Senha"
+            name="password"
+            iconposition="right"
+            message={password ? `${password.message}` : undefined}
             maxwidth="100%"
-            defaultvalue={user.name}
+            type="password"
           />
           <Input
             register={register}
-            placeholder="Email"
-            name="email"
-            message={email ? `${email.message}` : undefined}
+            placeholder="Confirmar Senha"
+            name="confirmPassword"
+            iconposition="right"
+            message={confirmPassword ? `${confirmPassword.message}` : undefined}
             maxwidth="100%"
-            defaultvalue={user.email}
-          />
-          <Input
-            register={register}
-            placeholder="Celular"
-            name="telefone"
-            message={telefone ? `${telefone.message}` : undefined}
-            maxwidth="100%"
-            defaultvalue={user.telefone}
+            type="password"
           />
           <Button type="submit" color="gold" size="medium">
-            Atualizar meus dados
+            Confirmar
           </Button>
         </StyledForm>
       </StyleBackgroundModal>
@@ -86,4 +73,4 @@ const ModalEditeClient = ({ close }: IModalCreateContact) => {
   );
 };
 
-export default ModalEditeClient;
+export default ModalUpdatePassword;

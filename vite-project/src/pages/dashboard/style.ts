@@ -214,3 +214,30 @@ export const StyledBoxUserButtons = styled.section`
   right: 0%;
   bottom: 0%;
 `;
+
+export const StyledLogout = styled.button`
+  width: 40px;
+  height: 40px;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: black;
+
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  border: none;
+
+  position: absolute;
+  right: 0%;
+  margin: 5px;
+
+  svg {
+    min-width: 30px;
+    height: 30px;
+    color: white;
+  }
+`;

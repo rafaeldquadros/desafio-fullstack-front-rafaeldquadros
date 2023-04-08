@@ -4,10 +4,7 @@ import { useForm } from "react-hook-form";
 import { useUser } from "../../context/user.context";
 import { IRegister } from "../../pages/register";
 import Icons from "../../services/icons";
-import {
-  schemaConfirmPassword,
-  schemaCreateContact,
-} from "../../validation/contacts.schema";
+import { schemaConfirmPassword } from "../../validation/contacts.schema";
 import Button from "../button";
 import { StyledForm } from "../form/style";
 import Input from "../input";
@@ -18,7 +15,7 @@ interface IModalCreateContact {
 }
 
 const ModalConfirmPassword = ({ close }: IModalCreateContact) => {
-  const { user, LoginRequest } = useUser();
+  const { user, ValidPasswordRequest } = useUser();
   const {
     handleSubmit,
     register,
@@ -31,7 +28,7 @@ const ModalConfirmPassword = ({ close }: IModalCreateContact) => {
 
   const handleContacts = async (data: any) => {
     data.email = user.email;
-    const response = await LoginRequest(data);
+    const response = await ValidPasswordRequest(data);
     console.log(response);
   };
   return (

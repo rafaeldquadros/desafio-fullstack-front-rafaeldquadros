@@ -1,10 +1,4 @@
-# BRECHO DA IT
 
-<br></br>
-
-### Este projeto é uma plataforma de e-commerce desenvolvida para empresa Brecho Da It.
-
-<br></br>
 
 # Funcionalidades e Padrões de Arquitetura Utilizada:
 
